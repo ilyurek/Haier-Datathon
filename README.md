@@ -1,4 +1,4 @@
-Haier Europe Talep Tahmini Yarışması - 24. Sıra Çözümü
+# Haier Europe Talep Tahmini Yarışması - 24. Sıra Çözümü
 Bu depo, Haier Europe tarafından düzenlenen Demand Forecasting Datathon yarışması için geliştirilen ve yarışmayı 24. sırada (Skor: 0.98973) tamamlayan çözümü içermektedir.
 
 🏆 Yarışma Özeti
