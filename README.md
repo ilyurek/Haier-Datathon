@@ -17,14 +17,14 @@ Değerlendirme Metriği: Regularized Weighted Mean Absolute Percentage Error (rW
 🛠️ Çözüm Mimarisi: "Triple Ensemble Recursive Pipeline"
 Final çözümümüz, üç güçlü Gradient Boosting algoritmasının (LightGBM, XGBoost, CatBoost) ağırlıklı ortalamasına dayanan, Özyineli (Recursive) bir tahminleme stratejisidir.
 
-1. Veri Ön İşleme (Preprocessing)
+## 1. Veri Ön İşleme (Preprocessing)
 Grid Oluşturma (Densification): Ham veride satış olmayan aylar eksikti. Tüm Market x Product x Date kombinasyonları için bir iskelet (skeleton) oluşturulup eksik aylar 0 ile dolduruldu.
 
 Akıllı Tarih Atama (Smart Imputation): start_production_date verisi eksik olan ürünler için, o ürünün ilk satış yaptığı tarih başlangıç tarihi olarak kabul edildi. Hiç satışı olmayanlar için 1980 tarihi atanarak "Eski Ürün" (Mature) muamelesi yapıldı.
 
 Gürültü Temizliği: İade kaynaklı negatif satışlar 0'a çekildi (Clipping).
 
-2. Özellik Mühendisliği (Feature Engineering)
+## 2. Özellik Mühendisliği (Feature Engineering)
 Modelin başarısının anahtarı, hiyerarşik yapıyı ve trend değişimlerini yakalayan 300+ özellik üretmekti.
 
 Hiyerarşik Özellikler (Family Wisdom):
@@ -51,7 +51,7 @@ Zaman ve Döngüsellik:
 
 Ay ve Çeyrek bilgileri için Sinüs/Kosinüs dönüşümleri.
 
-3. Modelleme: "Triple Threat Ensemble"
+## 3. Modelleme: "Triple Threat Ensemble"
 Tek bir model yerine, üç farklı algoritmanın gücü birleştirildi. Her model, yarışmanın resmi metriği olan rWMAPE skorunu maximize edecek şekilde Optuna ile ayrı ayrı optimize edildi.
 
 LightGBM: Hızlı eğitim ve yüksek doğruluk. (Objective: regression_l1)
@@ -62,7 +62,7 @@ CatBoost: Kategorik değişkenlerde (Structure, Market) üstün performans. (Los
 
 Ağırlıklandırma: Modellerin validasyon skorlarına göre dinamik ağırlıklar atandı (Örn: %40 LGBM, %35 XGB, %25 CAT).
 
-4. Özyineli Tahmin (Recursive Forecasting Loop)
+## 4. Özyineli Tahmin (Recursive Forecasting Loop)
 Direct Multi-Step yerine, geleceği adım adım inşa eden Recursive yöntem kullanıldı:
 
 Ay T: Ensemble model Kasım ayını tahmin eder.
@@ -73,7 +73,7 @@ Ay T+1: Model güncellenmiş özelliklerle Aralık ayını tahmin eder.
 
 Bu döngü 12 ay boyunca devam eder.
 
-5. Son İşlemler (Smart Post-Processing)
+## 5. Son İşlemler (Smart Post-Processing)
 Phase-Out Kuralı: end_production_date geçmiş ürünlerin tahminleri sert bir kural ile 0'a eşitlendi.
 
 Cold Start (Yeni Ürünler): Yeni piyasaya sürülen ürünler için lineer bir artış (Ramp-up) katsayısı uygulandı.
